@@ -22,9 +22,17 @@ from langchain.schema import Document
 # Config & paths
 # ------------------------
 load_dotenv()
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+# First try Streamlit Cloud secrets, else fallback to local .env
+OPENAI_API_KEY = st.secrets.get("OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY")
+
 if not OPENAI_API_KEY:
-    raise ValueError("OPENAI_API_KEY not found in .env. Put OPENAI_API_KEY=sk-... in your .env file.")
+    st.error("❌ OPENAI_API_KEY not found. Please set it in .env (local) or Streamlit Secrets (cloud).")
+    st.stop()
+    
+#OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+#if not OPENAI_API_KEY:
+    #raise ValueError("OPENAI_API_KEY not found in .env. Put OPENAI_API_KEY=sk-... in your .env file.")
 
 PERSIST_DIR = "chroma_store"
 CHAT_HISTORY_DIR = "chat_histories"
