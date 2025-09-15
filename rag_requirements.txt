@@ -1,0 +1,1 @@
+pip install streamlit openai langchain langchain-community chromadb pandas requests beautifulsoup4 pypdf2
