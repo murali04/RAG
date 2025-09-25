@@ -10,6 +10,7 @@ Streamlit RAG Chatbot with ChromaDB
 - Clean Markdown formatting
 - Role-based access: User / Admin (hardcoded password "12345")
 - Welcome message for users
+- Robust ingestion for large PDFs/CSVs/HTML (batched + skip empty chunks)
 """
 
 import os, io, re, json, requests
@@ -19,6 +20,7 @@ from bs4 import BeautifulSoup
 from PyPDF2 import PdfReader
 from dotenv import load_dotenv
 import numpy as np
+from tqdm import tqdm
 
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain.vectorstores import Chroma
@@ -38,10 +40,11 @@ CHAT_HISTORY_DIR = "chat_histories"
 os.makedirs(PERSIST_DIR, exist_ok=True)
 os.makedirs(CHAT_HISTORY_DIR, exist_ok=True)
 
-CHUNK_SIZE = 1000
+CHUNK_SIZE = 1500
 CHUNK_OVERLAP = 200
 TOP_K = 4
 SIMILARITY_THRESHOLD = 0.25
+BATCH_SIZE = 50
 
 # Hardcoded admin password
 ADMIN_USERNAME = "admin"
@@ -63,18 +66,18 @@ def csv_bytes_to_text(b: bytes) -> str:
 
 def html_bytes_to_text(b: bytes) -> str:
     soup = BeautifulSoup(b, "html.parser")
-    for tag in soup(["script", "style", "noscript"]): 
+    for tag in soup(["script", "style", "noscript"]):
         tag.decompose()
     texts = [t.get_text(" ", strip=True) for t in soup.find_all(["h1","h2","h3","p","li"])]
     return "\n\n".join([t for t in texts if t]) or soup.get_text("\n")
 
 def fetch_url_text(url: str):
-    r = requests.get(url, headers={"User-Agent":"RAG-Chatbot/1.0"}, timeout=20)
+    r = requests.get(url, headers={"User-Agent":"RAG-Chatbot/1.0"}, timeout=30)
     r.raise_for_status()
     ctype = r.headers.get("content-type","").lower()
-    if "pdf" in ctype or url.lower().endswith(".pdf"): 
+    if "pdf" in ctype or url.lower().endswith(".pdf"):
         return (pdf_bytes_to_text(r.content), r.url)
-    if "csv" in ctype or url.lower().endswith(".csv"): 
+    if "csv" in ctype or url.lower().endswith(".csv"):
         return (csv_bytes_to_text(r.content), r.url)
     return (html_bytes_to_text(r.content), r.url)
 
@@ -90,7 +93,7 @@ def build_docs(text: str, source: str):
         chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP
     )
     chunks = splitter.split_text(text or "")
-    return [Document(page_content=c, metadata={"source": source or "Unknown Source"}) 
+    return [Document(page_content=c, metadata={"source": source or "Unknown Source"})
             for c in chunks if c.strip()]
 
 def cosine_similarity(a, b):
@@ -105,13 +108,14 @@ def format_sources(docs, used_fallback=False):
     sources = []
     for doc in docs:
         meta = getattr(doc, "metadata", {}) or {}
-        source = meta.get("source") or meta.get("url") or "Unknown Source"
-        sources.append(str(source))
+        src = meta.get("source") or "Unknown Source"
+        if src and src != "NULL":
+            sources.append(str(src))
     seen = set(); ordered = []
     for s in sources:
         if s not in seen:
             seen.add(s); ordered.append(s)
-    return ordered
+    return ordered or ["Unknown Source"]
 
 # =========================
 # VECTORSTORE & HISTORY
@@ -202,7 +206,7 @@ if role == "admin":
             if st.button("❌ Delete user data"):
                 delete_memory(selected_user)
                 st.success(f"Deleted memory for {selected_user}")
-                st.experimental_rerun()
+                st.rerun()
 
 # ---------- USER ----------
 else:
@@ -215,17 +219,32 @@ else:
         if st.button("Ingest"):
             vs = load_vectorstore(user_id)
             added = 0
+            progress = st.progress(0)
+            all_docs = []
+
+            # process files
             for f in files or []:
                 docs = build_docs(extract_text_from_uploaded(f), f.name)
-                vs.add_documents(docs); added += len(docs)
+                all_docs.extend(docs)
+
+            # process links
             for url in (links or "").splitlines():
                 if not url.strip(): continue
                 text, final_url = fetch_url_text(url.strip())
                 docs = build_docs(text, final_url)
-                vs.add_documents(docs); added += len(docs)
-            vs.persist(); st.success(f"Ingested {added} chunks.")
+                all_docs.extend(docs)
 
-        if st.button("🗑️ Reset Memory"): 
+            # batch insert
+            for i in range(0, len(all_docs), BATCH_SIZE):
+                vs.add_documents(all_docs[i:i+BATCH_SIZE])
+                progress.progress(min((i+BATCH_SIZE)/len(all_docs), 1.0))
+                added += len(all_docs[i:i+BATCH_SIZE])
+
+            vs.persist()
+            progress.empty()
+            st.success(f"Ingested {added} chunks.")
+
+        if st.button("🗑️ Reset Memory"):
             delete_memory(user_id); st.success("Memory cleared.")
 
     if "active_user" not in st.session_state or st.session_state.get("active_user") != user_id:
@@ -242,14 +261,14 @@ else:
         with st.chat_message("user"): st.write(msg["user"])
         with st.chat_message("assistant"):
             st.markdown(msg["bot"])
-            if msg.get("sources"): 
-                with st.expander("Sources"): 
+            if msg.get("sources"):
+                with st.expander("Sources"):
                     for s in msg["sources"]: st.write(f"- {s}")
 
     prompt = st.chat_input("Ask something...")
     if prompt:
         embeddings = get_embeddings()
-        try: 
+        try:
             docs = vectorstore.similarity_search(prompt, k=TOP_K)
         except Exception:
             docs = []
@@ -282,7 +301,7 @@ else:
                 placeholder.markdown(text_out + "▌")
             placeholder.markdown(text_out)
 
-            with st.expander("Sources"): 
+            with st.expander("Sources"):
                 for s in sources: st.write(f"- {s}")
 
         st.session_state["chat_history"].append({"user":prompt,"bot":text_out,"sources":sources})

@@ -1,0 +1,100 @@
+Which of the following is a valid variable name in Python?|2var|_myVar|var-2|my var|B
+What will be the output of: print(2 == 2 and 3 < 1)?|True|False|Error|None|A
+Which loop is guaranteed to run at least once in Python?|for loop|while loop|do-while loop|None of these|D
+What keyword is used to define a function in Python?|func|def|function|lambda|B
+Which of the following is used to create a list?|{}|[]|()|set()|B
+Which collection type does not allow duplicate elements?|List|Tuple|Set|Dictionary|C
+What is the default return value of a Python function that doesn’t have a return statement?|0|None|False|Empty string|B
+What does *args allow you to do in a function?|Pass keyword arguments|Pass any number of positional arguments|Pass only integers|Pass default values|B
+What does **kwargs represent in a function?|List of arguments|Dictionary of keyword arguments|Tuple of arguments|None of these|B
+Which of the following is NOT a valid conditional statement keyword?|if|elif|else|elseif|D
+In OOP, which method is called automatically when an object is created?|__del__|__str__|__init__|__call__|C
+What will be the output of: my_list = [1,2,3]; print(my_list[1])?|1|2|3|Error|B
+Which method is used to add an item to a set?|append()|add()|insert()|update()|B
+Which of these is immutable in Python?|List|Set|Dictionary|Tuple|D
+What is the correct way to open a file for writing in Python?|open('file.txt', 'r')|open('file.txt', 'w')|open('file.txt', 'rw')|open('file.txt', 'a+')|B
+Which keyword is used to handle exceptions in Python?|try|except|finally|raise|B
+Which function creates an iterator in Python?|iter()|next()|range()|map()|A
+What will be the output of: next(iter([10,20,30]))?|10|20|30|Error|A
+Which keyword is used to create a generator in Python?|yield|generate|return|lambda|A
+What is the output of: sum(i for i in range(4))?|10|6|4|3|B
+Which of these is an example of a decorator in Python?|@staticmethod|@decorator|@classmethod|All of these|D
+What is the difference between is and == in Python?|No difference|is compares values, == compares identity|is compares identity, == compares values|Both are same in lists only|C
+Which operator is used for floor division in Python?|/|//|%|**|B
+What will be the output of: bool([])?|True|False|Error|None|B
+Which of the following data types is unhashable?|List|Tuple|Set|String|A
+What will be printed: print("hello".capitalize())?|HELLO|Hello|hello|Error|B
+Which of these removes whitespace from both ends of a string?|trim()|strip()|rstrip()|lstrip()|B
+What is the output of: "Python"[-1]?|P|n|o|Error|B
+Which of these methods can be used to get keys of a dictionary?|.values()|.items()|.keys()|.get()|C
+Which method is called when printing an object using print()?|__init__|__call__|__str__|__del__|C
+Which of these is NOT a Python built-in data type?|list|map|set|dict|B
+What is the output of: type((1,))?|<class 'tuple'>|<class 'int'>|<class 'list'>|<class 'set'>|A
+Which keyword is used to inherit a class in Python?|super|extends|inherits|class|A
+Which method is used to get a value from a dictionary with a default?|get()|values()|items()|pop()|A
+What does the break statement do in loops?|Skips one iteration|Stops the loop completely|Continues next iteration|Raises error|B
+What is the output of: print(3 * 'ab')?|abab|ab ab ab|ababab|Error|C
+Which of these is NOT a valid Boolean value in Python?|True|False|true|None|C
+What will be printed: print(5 // 2)?|2.5|3|2|Error|C
+Which operator is used to check membership in a list?|is|==|in|not|C
+What does pass statement do in Python?|Terminates program|Does nothing|Skips loop|Raises error|B
+Which of these creates an empty dictionary?|[]|{}|dict()|set()|C
+What is the output: print(type(range(5)))?|<class 'list'>|<class 'range'>|<class 'tuple'>|<class 'generator'>|B
+What is the default value of end parameter in print()?|\n|None|Space|Empty|A
+What will be printed: print(bool("False"))?|True|False|Error|None|A
+Which keyword is used to manually raise an exception?|throw|raise|error|except|B
+What is the output: print(len({"a":1,"b":2}))?|2|1|3|Error|A
+Which function returns absolute value in Python?|abs()|fabs()|absolute()|math.abs()|A
+Which function is used to convert string to list of characters?|split()|list()|str()|tuple()|B
+Which keyword defines an anonymous function?|def|lambda|func|return|B
+What is the result of: [x**2 for x in range(3)]?|[1,4,9]|[0,1,4]|[0,1,2]|Error|B
+What does enumerate() return?|List|Iterator of tuples|Dictionary|Set|B
+Which module provides mathematical functions in Python?|math|cmath|statistics|random|A
+Which exception occurs when dividing by zero?|TypeError|ValueError|ZeroDivisionError|IndexError|C
+Which of these opens a file in read-binary mode?|open('f.txt','rb')|open('f.txt','br')|open('f.txt','b')|open('f.txt','r')|A
+What will be the output: print("hi".upper())?|Hi|HI|hi|Error|B
+Which method removes a key from dictionary?|pop()|del|remove()|discard()|A
+What is the result of: set([1,2,2,3])?|[1,2,3]|{1,2,3}|(1,2,3)|Error|B
+Which built-in function gives length of an object?|count()|len()|length()|size()|B
+Which keyword allows execution of code after try block regardless of errors?|except|else|raise|finally|D
+What is the output: print(min([5,3,7]))?|7|3|5|Error|B
+Which function in Python returns the largest item?|max()|largest()|biggest()|top()|A
+Which keyword is used to define a generator function?|def|yield|gen|lambda|B
+What is the output: print("Python".startswith("Py"))?|True|False|Error|None|A
+Which function is used to sort a list in ascending order permanently?|sort()|sorted()|arrange()|order()|A
+What is the output of: print(10 % 3)?|1|3|0|Error|A
+Which of these is immutable?|list|dict|set|tuple|D
+Which keyword is used for multiple inheritance in Python?|multi|super|class|None|C
+Which of these defines a private variable in a class by convention?|_var|__var|var_|private var|B
+Which function returns keys of a dictionary?|items()|keys()|values()|get()|B
+What is the result of: "abc" * 2?|abcabc|aabbcc|abc|Error|A
+Which function converts string to integer?|toInt()|str()|int()|float()|C
+What is the output: print(list("123"))?|['123']|[1,2,3]|['1','2','3']|Error|C
+Which function returns current working directory?|getcwd()|cwd()|chdir()|osdir()|A
+Which operator is used for exponentiation in Python?|^|**|exp()|pow()|B
+Which keyword is used to handle exceptions in Python?|try|raise|except|error|C
+What will be the output: print(2==2 and 3<1)?|True|False|Error|None|B
+Which function converts an iterable to a tuple?|set()|tuple()|list()|dict()|B
+What is the output: print(type({}))?|<class 'dict'>|<class 'set'>|<class 'list'>|<class 'tuple'>|A
+Which module provides random number functions?|random|math|os|time|A
+Which statement is used to skip current iteration in loops?|skip|next|continue|break|C
+Which of these is NOT a valid function in Python?|print()|input()|scan()|len()|C
+What is the output: print(all([True,1,3]))?|True|False|Error|None|A
+What is the output: print(any([0,0,False]))?|True|False|Error|None|B
+Which method adds an element to a list?|add()|append()|insert()|extend()|B
+What is the output: print(5==5.0)?|False|True|Error|None|B
+Which method is called when object is created in a class?|__new__|__init__|__create__|__start__|B
+Which operator is overloaded by __add__ method?|+|-|*|/|A
+Which of these creates a generator expression?|[x for x in range(3)]|(x for x in range(3))|{x for x in range(3)}|gen(x)|B
+Which of these is not iterable?|list|tuple|int|dict|C
+What is the output: print(next(iter([10,20,30])))?|10|20|30|Error|A
+Which function checks memory address of an object?|mem()|id()|addr()|loc()|B
+Which function returns a sorted copy of a list?|sort()|sorted()|arrange()|order()|B
+Which module is used to work with regular expressions?|re|regex|pattern|match|A
+Which keyword is used to create a class in Python?|class|def|object|new|A
+Which function returns number of items in an iterable with a condition?|count()|sum()|len()|filter()|B
+What is the output: print("abc".replace("b","z"))?|azc|abz|abc|Error|A
+Which of these is NOT a Python loop construct?|for|while|do while|None|C
+Which method is used to convert dict items into a list of tuples?|items()|keys()|values()|pairs()|A
+Which keyword is used to check if a value exists in a sequence?|exists|has|in|is|C
+What is the output: print(isinstance(5,int))?|True|False|Error|None|A
